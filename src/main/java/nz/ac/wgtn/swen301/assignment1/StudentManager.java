@@ -2,6 +2,7 @@ package nz.ac.wgtn.swen301.assignment1;
 
 import nz.ac.wgtn.swen301.studentdb.*;
 
+import java.awt.List;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,12 +20,11 @@ public class StudentManager {
     static {
         StudentDB.init();
         
-        //Might not be ok but makes sense to only connect once at the start of the data base creation
-        
+        //Might not be ok but makes sense to only connect once at the start of the data base creation       
         try {
 			conn = DriverManager.getConnection("jdbc:derby:memory:studentdb");
 		} catch (SQLException e) {
-			System.out.println("Failed to connect to the data base in the static call");
+			System.out.println("Failed to connect to the data base in the static method");
 			e.printStackTrace();
 		}
     }
@@ -125,18 +125,44 @@ public class StudentManager {
      * Get all student ids currently being used in the database.
      * @return
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_getAllStudentIds (followed by optional numbers if multiple tests are used)
+     * @throws SQLException 
      */
-    public static Collection<String> getAllStudentIds() {
-        return null;
+    public static Collection<String> getAllStudentIds() {    	
+    	ArrayList<String> c = new ArrayList<String>(); 
+    	try {
+	    	Statement stmt = conn.createStatement();
+	        //query the db for all the results
+	        ResultSet results = stmt.executeQuery("SELECT id FROM students");           
+	        while (results.next()) {      //iterate through the data base (row by row)          	
+	             c.add(results.getString(1));     //get the id and add it to the list             
+	        }       
+    		} catch (SQLException e) {
+    		System.out.println("The database is empty or not connected!");
+    		e.printStackTrace();
+    	}	
+        return c;      
     }
 
     /**
      * Get all degree ids currently being used in the database.
      * @return
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_getAllDegreeIds (followed by optional numbers if multiple tests are used)
+     * @throws SQLException 
      */
-    public static Iterable<String> getAllDegreeIds() {
-        return null;
+    public static Iterable<String> getAllDegreeIds() {    
+    	ArrayList<String> list = new ArrayList<String>();
+    	Statement stmt;
+		try {
+			stmt = conn.createStatement();     
+	        ResultSet results = stmt.executeQuery("SELECT id FROM degrees");           
+	        while (results.next()) {      //iterate through the data base (row by row)          	
+	             list.add(results.getString(1));     //get the id and add it to the list             
+	        }    
+		} catch (SQLException e) {
+			System.out.println("The database is empty or not connected!");
+			e.printStackTrace();
+		}
+        return list;
     }
 
 
