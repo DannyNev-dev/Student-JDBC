@@ -2,6 +2,7 @@ package test.nz.ac.wgtn.swen301.assignment1;
 
 import nz.ac.wgtn.swen301.assignment1.StudentManager;
 import nz.ac.wgtn.swen301.studentdb.Degree;
+import nz.ac.wgtn.swen301.studentdb.NoSuchRecordException;
 import nz.ac.wgtn.swen301.studentdb.Student;
 import nz.ac.wgtn.swen301.studentdb.StudentDB;
 import org.junit.Before;
@@ -65,6 +66,16 @@ public class TestStudentManager {
     	StudentManager sm = new StudentManager();
     	ArrayList<String> list = (ArrayList<String>) sm.getAllDegreeIds();
     	assertEquals(list.get(5), "deg5");
+    }
+    /**
+     * tests if we can create a student
+     * @throws NoSuchRecordException 
+     */
+    @Test
+    public void test_createStudent() throws NoSuchRecordException{  
+    	StudentManager sm = new StudentManager();
+    	Student s = sm.createStudent("mcneil", "pauly", sm.readDegree("deg1"));
+    	assertNotNull(s);
     }
     
     

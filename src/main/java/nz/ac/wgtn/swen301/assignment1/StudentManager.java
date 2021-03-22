@@ -41,8 +41,8 @@ public class StudentManager {
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_readStudent (followed by optional numbers if multiple tests are used)
      */
     public static Student readStudent(String id) throws NoSuchRecordException {
-    	String firstName = null;
-    	String name = null;
+    	String firstName = "null";
+    	String name = "null";
     	Degree degree = null;   	
     	try {
     		String query = "SELECT FIRST_NAME,NAME,DEGREE FROM students WHERE ID=\'" + id + "\'"; //3 columns
@@ -118,7 +118,21 @@ public class StudentManager {
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_createStudent (followed by optional numbers if multiple tests are used)
      */
     public static Student createStudent(String name,String firstName,Degree degree) {
-        return null;
+        String id = Integer.toString(getAllStudentIds().size() + 1);
+        final String query = "INSERT INTO students "
+        		+ "VALUES (?, ?, ?, ?)";
+        try {
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setString(1, id);
+			ps.setString(2, firstName);
+			ps.setString(3, name);
+			ps.setString(4, degree.getId());
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("ERROR WHEN TRYING TO INSERT THE NEW STUDENT INTO THE TABLE");
+			e.printStackTrace();
+		}
+    	return new Student(id,firstName,name,degree);
     }
 
     /**
