@@ -45,11 +45,12 @@ public class StudentManager {
     	String name = "null";
     	Degree degree = null;   	
     	try {
-    		String query = "SELECT FIRST_NAME,NAME,DEGREE FROM students WHERE ID=\'" + id + "\'"; //3 columns
+    		String query = "SELECT FIRST_NAME,NAME,DEGREE FROM students WHERE ID=?"; //3 columns
             PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, id);
             ResultSet results = stmt.executeQuery();   
             //get the details from the result set
-            while (results.next()) {
+            if (results.next()) {
                 firstName = results.getString(1);
                 name = results.getString(2);
                 degree = readDegree(results.getString(3));
@@ -72,8 +73,9 @@ public class StudentManager {
     public static Degree readDegree(String id) throws NoSuchRecordException {
     	String name = "DefaultName";
     	try {
-    		String query = "SELECT NAME FROM degrees WHERE ID=\'" + id + "\'"; //3 columns
+    		String query = "SELECT NAME FROM degrees WHERE ID=?"; //3 columns
             PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, id);
             ResultSet results = stmt.executeQuery();            
             while (results.next()) {      //iterate through the data base (row by row)               
                  name = results.getString(1);     //get the degree name from results                              

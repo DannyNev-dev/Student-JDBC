@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,8 +36,7 @@ public class TestStudentManager {
      */
     @Test
     public void test_readStudent() throws Exception{
-    	Student student = new StudentManager().readStudent("id0");
-    	assertEquals(student.getName(), "James");
+    	assertEquals(StudentManager.readStudent("id0").getName(), "James");
     }
     
     /**
@@ -45,7 +45,7 @@ public class TestStudentManager {
      */
     @Test
     public void test_readDegree() throws Exception{
-    	Degree degree = new StudentManager().readDegree("deg0");
+    	Degree degree = StudentManager.readDegree("deg0");
     	assertEquals(degree.getName(), "BSc Computer Science");
     }
     
@@ -53,9 +53,8 @@ public class TestStudentManager {
      * tests if we can get all of the id's from the student table
      */
     @Test
-    public void test_getAllStudentIds(){  
-    	StudentManager sm = new StudentManager();
-    	ArrayList<String> list = (ArrayList<String>) sm.getAllStudentIds();
+    public void test_getAllStudentIds(){      
+    	ArrayList<String> list = (ArrayList<String>) StudentManager.getAllStudentIds();
     	assertEquals(list.get(0), "id0");
     }
     /**
@@ -63,8 +62,8 @@ public class TestStudentManager {
      */
     @Test
     public void test_getAllDegreeIds(){  
-    	StudentManager sm = new StudentManager();
-    	ArrayList<String> list = (ArrayList<String>) sm.getAllDegreeIds();
+    	
+    	ArrayList<String> list = (ArrayList<String>) StudentManager.getAllDegreeIds();
     	assertEquals(list.get(5), "deg5");
     }
     /**
@@ -76,6 +75,21 @@ public class TestStudentManager {
     	StudentManager sm = new StudentManager();
     	Student s = sm.createStudent("mcneil", "pauly", sm.readDegree("deg1"));
     	assertNotNull(s);
+    }
+    /**
+     * tests the performance of the read student method, reading a total of 1000 random students
+     * @throws NoSuchRecordException
+     */
+    @Test
+    public void testPerformance() throws NoSuchRecordException{  
+    	final long start = System.currentTimeMillis();       
+    	for (int i = 0; i < 1000; i++) {                
+    		StudentManager.readStudent("id" +  (int)(Math.random()*1000));            
+        }
+        final long end = System.currentTimeMillis();
+        final long speed = end-start;
+        System.out.print("Performance speed: " + speed + "ms");
+        assertTrue(speed <= 1000);
     }
     
     
