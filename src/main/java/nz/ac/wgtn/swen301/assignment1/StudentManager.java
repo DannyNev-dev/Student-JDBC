@@ -1,19 +1,32 @@
 package nz.ac.wgtn.swen301.assignment1;
 
 import nz.ac.wgtn.swen301.studentdb.*;
+
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Collection;
+
 
 /**
  * A student managers providing basic CRUD operations for instances of Student, and a read operation for instances of Degree.
  * @author jens dietrich
  */
 public class StudentManager {
-
+	
+	static Connection conn;
     // DO NOT REMOVE THE FOLLOWING -- THIS WILL ENSURE THAT THE DATABASE IS AVAILABLE
     // AND THE APPLICATION CAN CONNECT TO IT WITH JDBC
     static {
         StudentDB.init();
+        
+        //Might not be ok but makes sense to only connect once at the start of the data base creation
+        
+        try {
+			conn = DriverManager.getConnection("jdbc:derby:memory:studentdb");
+		} catch (SQLException e) {
+			System.out.println("Failed to connect to the data base in the static call");
+			e.printStackTrace();
+		}
     }
     // DO NOT REMOVE BLOCK ENDS HERE
 
@@ -28,7 +41,24 @@ public class StudentManager {
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_readStudent (followed by optional numbers if multiple tests are used)
      */
     public static Student readStudent(String id) throws NoSuchRecordException {
-        return null;
+    	String firstName = null;
+    	String name = null;
+    	Degree degree = null;   	
+    	try {
+    		String query = "SELECT FIRST_NAME,NAME,DEGREE FROM students WHERE ID=\'" + id + "\'"; //3 columns
+            PreparedStatement stmt = conn.prepareStatement(query);
+            ResultSet results = stmt.executeQuery();   
+            //get the details from the result set
+            while (results.next()) {
+                firstName = results.getString(1);
+                name = results.getString(2);
+                degree = readDegree(results.getString(3));
+            }
+    	}catch(SQLException s) {
+    		throw new NoSuchRecordException();
+    	}
+    	//create the new Student instance 
+    	return new Student(id,firstName,name,degree);
     }
 
     /**
@@ -40,7 +70,18 @@ public class StudentManager {
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_readDegree (followed by optional numbers if multiple tests are used)
      */
     public static Degree readDegree(String id) throws NoSuchRecordException {
-        return null;
+    	String name = "DefaultName";
+    	try {
+    		String query = "SELECT NAME FROM degrees WHERE ID=\'" + id + "\'"; //3 columns
+            PreparedStatement stmt = conn.prepareStatement(query);
+            ResultSet results = stmt.executeQuery();            
+            while (results.next()) {      //iterate through the data base (row by row)               
+                 name = results.getString(1);     //get the degree name from results                              
+            }
+    	}catch(SQLException s) {
+    		throw new NoSuchRecordException();
+    	}
+        return new Degree(id,name);
     }
 
     /**
