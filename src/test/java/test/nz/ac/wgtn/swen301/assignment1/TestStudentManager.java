@@ -6,12 +6,13 @@ import nz.ac.wgtn.swen301.studentdb.NoSuchRecordException;
 import nz.ac.wgtn.swen301.studentdb.Student;
 import nz.ac.wgtn.swen301.studentdb.StudentDB;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -75,6 +76,23 @@ public class TestStudentManager {
     	StudentManager sm = new StudentManager();
     	Student s = sm.createStudent("mcneil", "pauly", sm.readDegree("deg1"));
     	assertNotNull(s);
+    }
+    
+    /**
+     * tests if we can delete a student (We expect to receive no such record exception)
+     * @throws NoSuchRecordException 
+     */
+    @Test
+    public void test_delete() throws NoSuchRecordException{  
+    	Student s = StudentManager.readStudent("id5");
+    	StudentManager.delete(s);
+    	try {
+    		StudentManager.readStudent("id5");
+    	}catch(NoSuchRecordException e) {
+    		assert(true);
+    		return;
+    	}    
+    	assert(false);
     }
     /**
      * tests the performance of the read student method, reading a total of 1000 random students
