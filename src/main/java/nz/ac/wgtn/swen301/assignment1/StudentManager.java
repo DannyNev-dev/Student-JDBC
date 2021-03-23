@@ -45,7 +45,7 @@ public class StudentManager {
             psReadStudent.setString(1, id);
             ResultSet results = psReadStudent.executeQuery();               
             if (results.next()) {
-            	return new Student(id,results.getString(1),results.getString(2),readDegree(results.getString(3)));           
+            	return new Student(id,results.getString(2),results.getString(1),readDegree(results.getString(3)));           
             }
             throw new NoSuchRecordException();
     	}catch(SQLException e) {
@@ -71,7 +71,6 @@ public class StudentManager {
     	}catch(SQLException s) {
     		throw new NoSuchRecordException();
     	}
-    	if(name.equals("")) {throw new NoSuchRecordException();}
         return new Degree(id,name);
     }
     /**
@@ -100,7 +99,17 @@ public class StudentManager {
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_update (followed by optional numbers if multiple tests are used)
      */
     public static void update(Student student) throws NoSuchRecordException {
-    	
+    	final String firstName = "UPDATE students SET FIRST_NAME = \'"+student.getFirstName()+"\'  WHERE id = \'"+student.getId()+"\'";
+    	final String name = "UPDATE students SET NAME = \'"+student.getName()+"\'  WHERE id = \'"+student.getId()+"\'";
+    	final String degree = "UPDATE students SET DEGREE = \'"+student.getDegree().getId()+"\'  WHERE id = \'"+student.getId()+"\'";
+    	try {
+            Statement s = conn.createStatement();
+            s.executeUpdate(firstName);
+            s.executeUpdate(name);
+            s.executeUpdate(degree);
+    	}catch(SQLException s) {
+    		throw new NoSuchRecordException();
+    	}
     }
     /**
      * Create a new student with the values provided, and save it to the database.
@@ -124,7 +133,7 @@ public class StudentManager {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-    	return new Student(id,firstName,name,degree);
+    	return new Student(id,name,firstName,degree);
     }
     /**
      * This method gets all the student IDs and gets the last id in the DB and increments this id
