@@ -6,15 +6,12 @@ import nz.ac.wgtn.swen301.studentdb.NoSuchRecordException;
 import nz.ac.wgtn.swen301.studentdb.Student;
 import nz.ac.wgtn.swen301.studentdb.StudentDB;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
-import java.util.Collection;
 
 
 /**
@@ -73,8 +70,7 @@ public class TestStudentManager {
      */
     @Test
     public void test_createStudent() throws NoSuchRecordException{  
-    	StudentManager sm = new StudentManager();
-    	Student s = sm.createStudent("mcneil", "pauly", sm.readDegree("deg1"));
+    	Student s = StudentManager.createStudent("mcneil", "pauly", StudentManager.readDegree("deg1"));
     	assertNotNull(s);
     }
     
@@ -106,7 +102,7 @@ public class TestStudentManager {
         }
         final long end = System.currentTimeMillis();
         final long speed = end-start;
-        System.out.print("Performance speed: " + speed + "ms");
+        System.out.print("\nPerformance speed: " + speed + "ms\n");
         assertTrue(speed <= 1000);
     }
     
