@@ -98,7 +98,16 @@ public class TestStudentManager {
     	}    
     	assert(false);
     }
-    
+    /**
+     * tests if we can update a student entry in the student DB using a student class instance.
+     * @throws Exception
+     */
+    @Test
+    public void test_update() throws Exception{
+    	Student s = new Student("id2","Jenkins","Jenny",StudentManager.readDegree("deg0"));
+    	StudentManager.update(s);
+    	assertEquals(StudentManager.readStudent("id2").getFirstName(), "Jenny");
+    }
     /**
      * tests the performance of the read student method, reading a total of 1000 random students
      * @throws NoSuchRecordException
@@ -114,16 +123,7 @@ public class TestStudentManager {
         System.out.print("\nPerformance speed: " + speed + "ms\n");
         assertTrue(speed <= 1000);
     }
-    /**
-     * tests if we can update a student entry in the student DB using a student class instance.
-     * @throws Exception
-     */
-    @Test
-    public void test_update() throws Exception{
-    	Student s = new Student("id2","Jenkins","Jenny",StudentManager.readDegree("deg0"));
-    	StudentManager.update(s);
-    	assertEquals(StudentManager.readStudent("id2").getFirstName(), "Jenny");
-    }
+    
     
     
 }
