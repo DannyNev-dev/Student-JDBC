@@ -10,6 +10,21 @@
     <build>
     <plugins>
     	<plugin>
+		    <groupId>org.apache.maven.plugins</groupId>
+		    <artifactId>maven-jar-plugin</artifactId>
+		    <configuration>
+		        <archive>
+		            <manifest>
+		                <addClasspath>true</addClasspath>
+		                <classpathPrefix>libs/</classpathPrefix>
+		                <mainClass>
+		                    nz.ac.wgtn.swen301.assignment1.cli.FindStudentDetails
+		                </mainClass>
+		            </manifest>
+		        </archive>
+		    </configuration>
+		</plugin>
+    	<plugin>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-maven-plugin</artifactId>
 		    <version>2.4.4</version>
@@ -40,21 +55,18 @@
     </plugins>
     </build>
   <dependencies>
-  
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.12</version>
       <scope>test</scope>
     </dependency>
-
     <!-- https://mvnrepository.com/artifact/org.apache.derby/derby -->
     <dependency>
       <groupId>org.apache.derby</groupId>
       <artifactId>derby</artifactId>
       <version>10.14.2.0</version>
     </dependency>
-
       <!-- local dependency to setup database -->
       <dependency>
           <groupId>nz.ac.wgtn.swen301</groupId>
@@ -63,12 +75,9 @@
           <scope>system</scope>
           <systemPath>${project.basedir}/lib/studentdb-1.1.1.jar</systemPath>
       </dependency>
-
-  </dependencies>   
-    
+  </dependencies>      
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-  </properties>  
-  
+  </properties>   
 </project>
